@@ -9,6 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
 @Entity
 @Table(name = "phonebook")
 public class Contact implements Serializable {
@@ -68,9 +73,31 @@ public class Contact implements Serializable {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	
+	public boolean equals(Object obj) {
+		if (obj == null) { return false; }
+		if (obj == this) { return true; }
+		if (obj.getClass() != getClass()) {
+			return false;
+		}
+		Contact rhs = (Contact) obj;
+		return new EqualsBuilder()
+				.appendSuper(super.equals(obj))
+				.append(firstName, rhs.firstName)
+				.append(lastName, rhs.lastName)
+				.append(phone, rhs.phone).isEquals();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 37)
+				.append(firstName)
+				.append(lastName)
+				.append(phone).toHashCode();
+	}
 
 	@Override
 	public String toString() {
-		return String.format("Contact[id=%d, firstName='%s', lastName='%s', phone='%s']", id, firstName, lastName, phone);
+		return new ReflectionToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE).toString();
 	}
 }

@@ -10,7 +10,7 @@ import com.sber.repository.ContactRepository;
 public class ContactServiceImpl implements ContactService {
 	
 	@Autowired
-	ContactRepository repository;
+	private ContactRepository repository;
 	
 	 @Override
 	 public Iterable<Contact> findAll() {

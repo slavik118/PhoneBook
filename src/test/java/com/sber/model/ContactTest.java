@@ -14,7 +14,8 @@ import com.sber.util.ReflectTool;
 
 
 public class ContactTest {
-  @Test
+  
+	@Test
   public void typeAnnotations() {
     // assert
     AssertAnnotations.assertType(

@@ -8,12 +8,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 import com.sber.util.AssertAnnotations;
 import com.sber.util.ReflectTool;
+import com.sber.util.UtilTool;
 
 
 public class ContactTest {
@@ -113,12 +115,7 @@ public class ContactTest {
   @Test
   public void testPersonBuilder() {
       final long expectedId = new Random().nextLong();
-	  final Contact fromBuilder = Contact.builder()
-			    .id(expectedId)
-				.firstName("Fred")
-				.lastName("Doe")
-				.phone("1 (555) 456-56-56")
-				.build();
+      final Contact fromBuilder = UtilTool.createContact(expectedId);
       assertEquals(expectedId, fromBuilder.getId());
 
   }
@@ -140,12 +137,7 @@ public class ContactTest {
   @Test
   public void testToString() {
 	  final long expectedId = new Random().nextLong();
-	  final Contact contact = Contact.builder()
-			    .id(expectedId)
-				.firstName("Fred")
-				.lastName("Doe")
-				.phone("1 (555) 456-56-56")
-				.build();
+	  final Contact contact = UtilTool.createContact(expectedId);
 	  String expected = String.format("Contact(id=%d, firstName=Fred, lastName=Doe, phone=1 (555) 456-56-56)", expectedId);
 	  assertEquals(expected, contact.toString());
   }

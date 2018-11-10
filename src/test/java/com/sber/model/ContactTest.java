@@ -1,13 +1,16 @@
 package com.sber.model;
 
+import java.util.Random;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import org.junit.Assert;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 import com.sber.util.AssertAnnotations;
 import com.sber.util.ReflectTool;
@@ -15,16 +18,20 @@ import com.sber.util.ReflectTool;
 
 public class ContactTest {
   
+  /**
+   * Test class type.
+   */
 	@Test
-  public void typeAnnotations() {
-    // assert
+  public void testTypeAnnotations() {
     AssertAnnotations.assertType(
         Contact.class, Entity.class, Table.class);
   }
   
+  /**
+   *  Test class fields.
+  */
   @Test
-  public void fieldAnnotations() {
-    // assert
+  public void testFieldAnnotations() {
     AssertAnnotations.assertField(
     		Contact.class, "id", Id.class, GeneratedValue.class);
     AssertAnnotations.assertField(
@@ -35,63 +42,112 @@ public class ContactTest {
     		Contact.class, "phone", Column.class);
   }
   
+  /**
+   * Test entity.
+   */
   @Test
-  public void entity() {
-    // setup
-    Entity a
+  public void testEntity() {
+    final Entity a
     = ReflectTool.getClassAnnotation(Contact.class, Entity.class);
-    // assert
-    Assert.assertEquals("", a.name());
+    assertEquals("", a.name());
   }
   
+  /**
+   * Test table name.
+   */
   @Test
-  public void table() {
-    // setup
-    Table t
+  public void testTable() {
+    final Table t
     = ReflectTool.getClassAnnotation(Contact.class, Table.class);
-    // assert
-    Assert.assertEquals("phonebook", t.name());
+    assertEquals("phonebook", t.name());
   }
   
+  /**
+   * Test id field.
+   */
   @Test
-  public void id() {
-    // setup
-    GeneratedValue a
+  public void testId() {
+    final GeneratedValue a
     = ReflectTool.getFieldAnnotation(
     		Contact.class, "id", GeneratedValue.class);
-    // assert
-    Assert.assertEquals("", a.generator());
-    Assert.assertEquals(GenerationType.AUTO, a.strategy());
+    assertEquals("", a.generator());
+    assertEquals(GenerationType.AUTO, a.strategy());
   }
   
+  /**
+   * Test First Name field.
+   */
   @Test
-  public void firstName() {
-    // setup
-    Column c
+  public void testFirstName() {
+    final Column c
     = ReflectTool.getFieldAnnotation(
     		Contact.class, "firstName", Column.class);
-    // assert
-    Assert.assertEquals("firstname", c.name());
+    assertEquals("firstname", c.name());
   }
   
+  /**
+   * Test Last Name field.
+   */
   @Test
-  public void lastName() {
-    // setup
-    Column c
+  public void testLastName() {
+    final Column c
     = ReflectTool.getFieldAnnotation(
     		Contact.class, "lastName", Column.class);
-    
-    // assert
-    Assert.assertEquals("lastname", c.name());
+    assertEquals("lastname", c.name());
   }
   
+  /**
+   * Test phone field.
+   */
   @Test
-  public void phone() {
-    // setup
-	  Column c
+  public void testPhone() {
+	  final Column c
     = ReflectTool.getFieldAnnotation(
     		Contact.class, "phone", Column.class);
-    // assert
-    Assert.assertEquals("phone", c.name());
+    assertEquals("phone", c.name());
   }
+  
+  /**
+   * Test contact builder.
+   */
+  @Test
+  public void testPersonBuilder() {
+      final long expectedId = new Random().nextLong();
+	  final Contact fromBuilder = Contact.builder()
+			    .id(expectedId)
+				.firstName("Fred")
+				.lastName("Doe")
+				.phone("1 (555) 456-56-56")
+				.build();
+      assertEquals(expectedId, fromBuilder.getId());
+
+  }
+  
+  /**
+   * Test contact constructor.
+   */
+  @Test
+  public void testPersonConstructor() {
+      final long expectedId = new Random().nextLong();
+      final Contact fromNoArgConstructor = new Contact();
+      fromNoArgConstructor.setId(expectedId);
+      assertEquals(expectedId, fromNoArgConstructor.getId());
+  }
+  
+  /**
+   * Test toString() method.
+   */
+  @Test
+  public void testToString() {
+	  final long expectedId = new Random().nextLong();
+	  final Contact contact = Contact.builder()
+			    .id(expectedId)
+				.firstName("Fred")
+				.lastName("Doe")
+				.phone("1 (555) 456-56-56")
+				.build();
+	  String expected = String.format("Contact(id=%d, firstName=Fred, lastName=Doe, phone=1 (555) 456-56-56)", expectedId);
+	  assertEquals(expected, contact.toString());
+  }
+  
 }

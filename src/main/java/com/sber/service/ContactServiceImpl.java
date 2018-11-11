@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.sber.model.Contact;
 import com.sber.repository.ContactRepository;
 
+import lombok.NonNull;
+
 @Service
 public class ContactServiceImpl implements ContactService {
 	
@@ -24,12 +26,12 @@ public class ContactServiceImpl implements ContactService {
 	 }
 	 
 	 @Transactional(readOnly = true)
-	 public Iterable<Contact> findByLastName(String lastName){
+	 public Iterable<Contact> findByLastName(@NonNull String lastName){
 		 return this.contactRepository.findByLastName(lastName);
 	 }	 
 
 	 @Transactional
-	 public void saveContact(Contact contact){
+	 public void saveContact(@NonNull Contact contact){
 		  this.contactRepository.save(contact);
 	 }
 

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
+@RequestMapping(path = "/")
 @Slf4j
 public class ContactController {
 	
@@ -25,13 +27,13 @@ public class ContactController {
 	@Autowired
 	private ContactServiceImpl contactService;
 
-	@PostMapping("/postcontact")
-	public void postCustomer(@RequestBody Contact contact) {
+	@PostMapping(path = "/postcontact", consumes = "application/json", produces = "application/json")
+	public void postContact(@RequestBody Contact contact) {
 		log.debug("Contact: " + contact);
 		this.contactService.saveContact(contact);
 	}
 
-	@GetMapping("/findall")
+	@GetMapping(path = "/findall", produces = "application/json")
 	public Response findAll() {
 		return Response.builder()
 				.status(DONE_STATUS_MESSAGE)
@@ -39,7 +41,7 @@ public class ContactController {
 				.build();
 	}
 
-	@GetMapping("/contact/{id}")
+	@GetMapping(path = "/contact/{id}", produces = "application/json")
 	public Response findContactById(@PathVariable("id") long id) {
 		log.debug("User id: " + id);		
 		return Response.builder()
@@ -48,7 +50,7 @@ public class ContactController {
 				.build();
 	}
 
-	@GetMapping("/findbylastname")
+	@GetMapping(path = "/findbylastname", produces = "application/json")
 	public Response findByLastName(@RequestParam(value = "lastName", required = true) String lastName) {
 		log.debug("User Last Name: " + lastName);		
 		return Response.builder()
